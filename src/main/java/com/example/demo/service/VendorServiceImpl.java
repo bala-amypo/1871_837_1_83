@@ -1,15 +1,13 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Vendor;
-import com.example.demo.repository.VendorRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
-import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.example.demo.entity.Vendor;
+import com.example.demo.repository.VendorRepository;
 
 @Service
-@Transactional
 public class VendorServiceImpl implements VendorService {
 
     private final VendorRepository vendorRepository;
@@ -21,23 +19,26 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor createVendor(Vendor vendor) {
         if (vendorRepository.existsByName(vendor.getName())) {
-            throw new IllegalArgumentException("Vendor name must be unique");
+            throw new IllegalArgumentException("unique");
         }
         return vendorRepository.save(vendor);
     }
 
     @Override
-    public Optional<Vendor> getVendor(Long id) {
-        return vendorRepository.findById(id);
+    public Vendor getVendorById(Long id) {
+        return vendorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 
     @Override
-    public List<Vendor> listAll() {
+    public List<Vendor> getAllVendors() {
         return vendorRepository.findAll();
     }
 
     @Override
-    public boolean existsByName(String name) {
-        return vendorRepository.existsByName(name);
+    public void deactivateVendor(Long id) {
+        Vendor vendor = getVendorById(id);
+        vendor.setActive(false);
+        vendorRepository.save(vendor);
     }
 }
