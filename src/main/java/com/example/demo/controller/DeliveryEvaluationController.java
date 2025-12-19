@@ -1,31 +1,42 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.DeliveryEvaluation;
+import com.example.demo.service.DeliveryEvaluationService;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.entity.DeliveryEvaluation;
-import com.example.demo.repository.DeliveryEvaluationRepository;
 
 @RestController
 @RequestMapping("/api/evaluations")
 public class DeliveryEvaluationController {
 
-    private final DeliveryEvaluationRepository deliveryEvaluationRepository;
+    private final DeliveryEvaluationService service;
 
-    public DeliveryEvaluationController(DeliveryEvaluationRepository deliveryEvaluationRepository) {
-        this.deliveryEvaluationRepository = deliveryEvaluationRepository;
+    public DeliveryEvaluationController(DeliveryEvaluationService service) {
+        this.service = service;
     }
-    
-    @GetMapping
-    public List<DeliveryEvaluation> getAllEvaluations() {
-        return deliveryEvaluationRepository.findAll();
+
+    // 1️⃣ Create evaluation
+    @PostMapping
+    public DeliveryEvaluation create(@RequestBody DeliveryEvaluation evaluation) {
+        return service.createEvaluation(evaluation);
     }
-    @GetMapping("/{vendorName}")
-    public List<DeliveryEvaluation> getByVendor(@PathVariable String vendorName) {
-        return deliveryEvaluationRepository.findByVendorName(vendorName);
+
+    // 2️⃣ Get evaluation by ID
+    @GetMapping("/{id}")
+    public DeliveryEvaluation getById(@PathVariable Long id) {
+        return service.getEvaluationById(id);
+    }
+
+    // 3️⃣ Get evaluations for vendor
+    @GetMapping("/vendor/{vendorId}")
+    public List<DeliveryEvaluation> getByVendor(@PathVariable Long vendorId) {
+        return service.getEvaluationsForVendor(vendorId);
+    }
+
+    // 4️⃣ Get evaluations for SLA requirement
+    @GetMapping("/requirement/{reqId}")
+    public List<DeliveryEvaluation> getByRequirement(@PathVariable Long reqId) {
+        return service.getEvaluationsForRequirement(reqId);
     }
 }

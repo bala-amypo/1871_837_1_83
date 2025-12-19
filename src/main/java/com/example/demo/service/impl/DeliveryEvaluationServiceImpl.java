@@ -4,6 +4,7 @@ import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DeliveryEvaluationService;
 
+import java.util.Date;
 import java.util.List;
 
 public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService {
@@ -23,6 +24,7 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
 
     @Override
     public DeliveryEvaluation createEvaluation(DeliveryEvaluation eval) {
+
         Vendor vendor = vendorRepo.findById(eval.getVendor().getId())
                 .orElseThrow(() -> new RuntimeException("not found"));
 
@@ -48,6 +50,9 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
         eval.setMeetsQualityTarget(
                 eval.getQualityScore() >= sla.getMinQualityScore()
         );
+
+        // ✅ SET evaluation date
+        eval.setEvaluationDate(new Date());
 
         return evaluationRepo.save(eval);
     }

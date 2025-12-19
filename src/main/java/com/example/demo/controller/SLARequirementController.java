@@ -1,51 +1,49 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.SLARequirement;
+import com.example.demo.service.SLARequirementService;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.demo.entity.SLARequirement;
-import com.example.demo.repository.SLARequirementRepository;
-
 @RestController
-@RequestMapping("/api/sla")
+@RequestMapping("/api/sla-requirements")
 public class SLARequirementController {
 
-    private final SLARequirementRepository slaRequirementRepository;
+    private final SLARequirementService service;
 
-    public SLARequirementController(SLARequirementRepository slaRequirementRepository) {
-        this.slaRequirementRepository = slaRequirementRepository;
+    public SLARequirementController(SLARequirementService service) {
+        this.service = service;
     }
 
+    // 1️⃣ Create SLA requirement
     @PostMapping
-    public SLARequirement createSLA(@RequestBody SLARequirement slaRequirement) {
-        return slaRequirementRepository.save(slaRequirement);
+    public SLARequirement create(@RequestBody SLARequirement req) {
+        return service.createRequirement(req);
     }
 
-    @GetMapping("/test")
-    public SLARequirement createSLATest(
-            @RequestParam String vendorName,
-            @RequestParam String slaType,
-            @RequestParam Integer thresholdValue,
-            @RequestParam String unit) {
-
-        SLARequirement sla = new SLARequirement(
-                vendorName,
-                slaType,
-                thresholdValue,
-                unit
-        );
-
-        return slaRequirementRepository.save(sla);
+    // 2️⃣ Update SLA requirement
+    @PutMapping("/{id}")
+    public SLARequirement update(@PathVariable Long id,
+                                 @RequestBody SLARequirement req) {
+        return service.updateRequirement(id, req);
     }
 
+    // 3️⃣ Get SLA requirement by ID
+    @GetMapping("/{id}")
+    public SLARequirement getById(@PathVariable Long id) {
+        return service.getRequirementById(id);
+    }
+
+    // 4️⃣ Get all SLA requirements
     @GetMapping
-    public List<SLARequirement> getAllSLAs() {
-        return slaRequirementRepository.findAll();
+    public List<SLARequirement> getAll() {
+        return service.getAllRequirements();
+    }
+
+    // 5️⃣ Deactivate SLA requirement
+    @PutMapping("/{id}/deactivate")
+    public void deactivate(@PathVariable Long id) {
+        service.deactivateRequirement(id);
     }
 }

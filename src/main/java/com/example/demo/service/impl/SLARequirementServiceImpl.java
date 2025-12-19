@@ -28,10 +28,18 @@ public class SLARequirementServiceImpl implements SLARequirementService {
     @Override
     public SLARequirement updateRequirement(Long id, SLARequirement req) {
         SLARequirement existing = getRequirementById(id);
+
+        // ✅ UNIQUE NAME CHECK (TEST REQUIRED)
+        if (!existing.getRequirementName().equals(req.getRequirementName())
+                && repository.existsByRequirementName(req.getRequirementName())) {
+            throw new IllegalArgumentException("unique");
+        }
+
         existing.setRequirementName(req.getRequirementName());
         existing.setDescription(req.getDescription());
         existing.setMaxDeliveryDays(req.getMaxDeliveryDays());
         existing.setMinQualityScore(req.getMinQualityScore());
+
         return repository.save(existing);
     }
 
