@@ -16,6 +16,7 @@ public class Vendor {
     private String contactEmail;
     private String contactPhone;
     private Boolean active = true;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
@@ -23,6 +24,7 @@ public class Vendor {
     void onCreate() {
         createdAt = new Timestamp(System.currentTimeMillis());
         updatedAt = createdAt;
+        if (active == null) active = true;
     }
 
     @PreUpdate
@@ -30,5 +32,5 @@ public class Vendor {
         updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // getters and setters
+    // getters & setters
 }
