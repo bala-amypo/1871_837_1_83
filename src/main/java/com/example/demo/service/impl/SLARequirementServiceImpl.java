@@ -3,9 +3,11 @@ package com.example.demo.service.impl;
 import com.example.demo.model.SLARequirement;
 import com.example.demo.repository.SLARequirementRepository;
 import com.example.demo.service.SLARequirementService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class SLARequirementServiceImpl implements SLARequirementService {
 
     private final SLARequirementRepository repository;
@@ -17,10 +19,10 @@ public class SLARequirementServiceImpl implements SLARequirementService {
     @Override
     public SLARequirement createRequirement(SLARequirement req) {
         if (req.getMaxDeliveryDays() <= 0) {
-            throw new IllegalArgumentException("Max delivery days");
+            throw new IllegalArgumentException("Max delivery days must be > 0");
         }
         if (req.getMinQualityScore() < 0 || req.getMinQualityScore() > 100) {
-            throw new IllegalArgumentException("Quality score between 0 and 100");
+            throw new IllegalArgumentException("Quality score must be between 0 and 100");
         }
         return repository.save(req);
     }
@@ -29,10 +31,9 @@ public class SLARequirementServiceImpl implements SLARequirementService {
     public SLARequirement updateRequirement(Long id, SLARequirement req) {
         SLARequirement existing = getRequirementById(id);
 
-        // ✅ UNIQUE NAME CHECK (TEST REQUIRED)
         if (!existing.getRequirementName().equals(req.getRequirementName())
                 && repository.existsByRequirementName(req.getRequirementName())) {
-            throw new IllegalArgumentException("unique");
+            throw new IllegalArgumentException("Requirement name must be unique");
         }
 
         existing.setRequirementName(req.getRequirementName());
@@ -46,7 +47,7 @@ public class SLARequirementServiceImpl implements SLARequirementService {
     @Override
     public SLARequirement getRequirementById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("SLA Requirement not found"));
     }
 
     @Override
