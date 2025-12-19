@@ -3,9 +3,11 @@ package com.example.demo.service.impl;
 import com.example.demo.model.Vendor;
 import com.example.demo.repository.VendorRepository;
 import com.example.demo.service.VendorService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class VendorServiceImpl implements VendorService {
 
     private final VendorRepository vendorRepository;
@@ -17,7 +19,7 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor createVendor(Vendor vendor) {
         if (vendorRepository.existsByName(vendor.getName())) {
-            throw new IllegalArgumentException("unique");
+            throw new IllegalArgumentException("Vendor name must be unique");
         }
         vendor.setActive(true);
         return vendorRepository.save(vendor);
@@ -35,7 +37,7 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getVendorById(Long id) {
         return vendorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("Vendor not found"));
     }
 
     @Override
