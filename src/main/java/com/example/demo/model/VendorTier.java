@@ -19,6 +19,7 @@ public class VendorTier {
     public Long getId() { return id; }
     public String getTierName() { return tierName; }
     public Double getMinScoreThreshold() { return minScoreThreshold; }
+    public String getDescription() { return description; } // ✅ FIX
     public Boolean getActive() { return active; }
 
     public void setTierName(String tierName) { this.tierName = tierName; }
