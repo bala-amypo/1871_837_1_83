@@ -32,13 +32,17 @@ public class Vendor {
         updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // ✅ GETTERS & SETTERS
+    // ✅ GETTERS
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getContactEmail() { return contactEmail; }
     public String getContactPhone() { return contactPhone; }
     public Boolean getActive() { return active; }
+    public Timestamp getCreatedAt() { return createdAt; }
+    public Timestamp getUpdatedAt() { return updatedAt; }
 
+    // ✅ SETTERS
+    public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
     public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
