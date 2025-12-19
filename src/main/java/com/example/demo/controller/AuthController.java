@@ -9,18 +9,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    public AuthController(UserService s, JwtTokenProvider jwt) {}
+    private final UserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @PostMapping("/register")
     public User register(@RequestParam String email,
                          @RequestParam String password,
                          @RequestParam String role) {
-        return null;
+        return userService.register(email, password, role);
     }
 
     @PostMapping("/login")
     public Object login(@RequestParam String email,
                         @RequestParam String password) {
-        return null;
+        return userService.login(email, password);
     }
 }
