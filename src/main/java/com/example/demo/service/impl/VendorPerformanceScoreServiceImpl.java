@@ -1,7 +1,11 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
+import com.example.demo.model.Vendor;
+import com.example.demo.model.VendorPerformanceScore;
+import com.example.demo.repository.DeliveryEvaluationRepository;
+import com.example.demo.repository.VendorPerformanceScoreRepository;
+import com.example.demo.repository.VendorRepository;
+import com.example.demo.repository.VendorTierRepository;
 import com.example.demo.service.VendorPerformanceScoreService;
 import org.springframework.stereotype.Service;
 
@@ -30,26 +34,35 @@ public class VendorPerformanceScoreServiceImpl
 
     @Override
     public VendorPerformanceScore calculateScore(Long vendorId) {
-        // Stub logic – wiring is the goal right now
+
         Vendor vendor = vendorRepo.findById(vendorId)
                 .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
+        // 🔧 Placeholder logic (wiring correctness is the goal)
         VendorPerformanceScore score = new VendorPerformanceScore();
         score.setVendor(vendor);
+        score.setOnTimePercentage(0.0);
+        score.setQualityCompliancePercentage(0.0);
+        score.setOverallScore(0.0);
         score.setCalculatedAt(new Timestamp(System.currentTimeMillis()));
-        score.setScore(0.0);
 
         return scoreRepo.save(score);
     }
 
     @Override
     public VendorPerformanceScore getLatestScore(Long vendorId) {
-        return scoreRepo.findTopByVendorIdOrderByCalculatedAtDesc(vendorId)
-                .orElseThrow(() -> new RuntimeException("No score found"));
+        List<VendorPerformanceScore> scores =
+                scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
+
+        if (scores.isEmpty()) {
+            throw new RuntimeException("No scores found for vendor");
+        }
+
+        return scores.get(0);
     }
 
     @Override
     public List<VendorPerformanceScore> getScoresForVendor(Long vendorId) {
-        return scoreRepo.findByVendorId(vendorId);
+        return scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
     }
 }
