@@ -6,11 +6,11 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final String secret;
-    private final long validity;
+    private final long validityMs;
 
-    public JwtTokenProvider(String secret, long validity) {
+    public JwtTokenProvider(String secret, long validityMs) {
         this.secret = secret;
-        this.validity = validity;
+        this.validityMs = validityMs;
     }
 
     public String createToken(String email, String role, Long userId) {
@@ -20,12 +20,12 @@ public class JwtTokenProvider {
         claims.put("userId", userId);
 
         Date now = new Date();
-        Date exp = new Date(now.getTime() + validity);
+        Date expiry = new Date(now.getTime() + validityMs);
 
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(exp)
+                .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }

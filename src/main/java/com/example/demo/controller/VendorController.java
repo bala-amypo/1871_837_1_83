@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.model.Vendor;
 import com.example.demo.service.VendorService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -17,8 +16,8 @@ public class VendorController {
     }
 
     @PostMapping
-    public Vendor create(@RequestBody Vendor v) {
-        return service.createVendor(v);
+    public Vendor create(@RequestBody Vendor vendor) {
+        return service.createVendor(vendor);
     }
 
     @GetMapping("/{id}")
