@@ -17,5 +17,17 @@ public class SLARequirement {
     private Double minQualityScore;
     private Boolean active = true;
 
-    // getters & setters
+    // ✅ GETTERS & SETTERS
+    public Long getId() { return id; }
+    public String getRequirementName() { return requirementName; }
+    public String getDescription() { return description; }
+    public Integer getMaxDeliveryDays() { return maxDeliveryDays; }
+    public Double getMinQualityScore() { return minQualityScore; }
+    public Boolean getActive() { return active; }
+
+    public void setRequirementName(String requirementName) { this.requirementName = requirementName; }
+    public void setDescription(String description) { this.description = description; }
+    public void setMaxDeliveryDays(Integer maxDeliveryDays) { this.maxDeliveryDays = maxDeliveryDays; }
+    public void setMinQualityScore(Double minQualityScore) { this.minQualityScore = minQualityScore; }
+    public void setActive(Boolean active) { this.active = active; }
 }

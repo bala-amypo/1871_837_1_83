@@ -23,5 +23,12 @@ public class DeliveryEvaluation {
     private Boolean meetsDeliveryTarget;
     private Boolean meetsQualityTarget;
 
-    // getters & setters
+    // ✅ GETTERS & SETTERS
+    public Vendor getVendor() { return vendor; }
+    public SLARequirement getSlaRequirement() { return slaRequirement; }
+    public Integer getActualDeliveryDays() { return actualDeliveryDays; }
+    public Double getQualityScore() { return qualityScore; }
+
+    public void setMeetsDeliveryTarget(Boolean val) { this.meetsDeliveryTarget = val; }
+    public void setMeetsQualityTarget(Boolean val) { this.meetsQualityTarget = val; }
 }
