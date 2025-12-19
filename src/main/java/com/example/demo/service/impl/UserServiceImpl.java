@@ -9,6 +9,7 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(UserRepository repo, JwtTokenProvider jwt) {}
 
+    @Override
     public User register(String email, String password, String role) {
         User u = new User();
         u.setEmail(email);
@@ -16,10 +17,12 @@ public class UserServiceImpl implements UserService {
         return u;
     }
 
+    @Override
     public User login(String email, String password) {
         throw new RuntimeException("User not found");
     }
 
+    @Override
     public User getByEmail(String email) {
         throw new RuntimeException("User not found");
     }
