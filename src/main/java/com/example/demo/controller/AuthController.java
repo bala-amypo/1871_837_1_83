@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
 import com.example.demo.model.User;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.UserService;
@@ -9,24 +11,37 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService userService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final UserService service;
+    private final JwtTokenProvider jwt;
 
-    public AuthController(UserService userService, JwtTokenProvider jwtTokenProvider) {
-        this.userService = userService;
-        this.jwtTokenProvider = jwtTokenProvider;
+    public AuthController(UserService service, JwtTokenProvider jwt) {
+        this.service = service;
+        this.jwt = jwt;
     }
 
     @PostMapping("/register")
-    public User register(@RequestParam String email,
-                         @RequestParam String password,
-                         @RequestParam String role) {
-        return userService.register(email, password, role);
+    public User register(@RequestBody AuthRequest req) {
+        return service.register(
+                req.getEmail(),
+                req.getPassword(),
+                req.getRole()
+        );
     }
 
     @PostMapping("/login")
-    public Object login(@RequestParam String email,
-                        @RequestParam String password) {
-        return userService.login(email, password);
+    public AuthResponse login(@RequestBody AuthRequest req) {
+
+        User user = service.login(
+                req.getEmail(),
+                req.getPassword()
+        );
+
+        String token = jwt.createToken(
+                user.getEmail(),
+                user.getRole(),
+                user.getId()
+        );
+
+        return new AuthResponse(token, user.getEmail(), user.getRole());
     }
 }

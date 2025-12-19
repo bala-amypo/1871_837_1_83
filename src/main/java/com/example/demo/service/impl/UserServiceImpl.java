@@ -10,42 +10,41 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
+    private final JwtTokenProvider jwt;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           JwtTokenProvider jwtTokenProvider,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.passwordEncoder = passwordEncoder;
+    public UserServiceImpl(UserRepository repo,
+                           PasswordEncoder encoder,
+                           JwtTokenProvider jwt) {
+        this.repo = repo;
+        this.encoder = encoder;
+        this.jwt = jwt;
     }
 
     @Override
     public User register(String email, String password, String role) {
         User user = new User();
         user.setEmail(email);
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(encoder.encode(password));
         user.setRole(role);
-        return userRepository.save(user);
+        return repo.save(user);
     }
 
     @Override
     public User login(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("not found"));
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new RuntimeException("invalid");
         }
-
         return user;
     }
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return repo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("not found"));
     }
 }
