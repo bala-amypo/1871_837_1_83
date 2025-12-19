@@ -3,10 +3,12 @@ package com.example.demo.service.impl;
 import com.example.demo.model.*;
 import com.example.demo.repository.*;
 import com.example.demo.service.DeliveryEvaluationService;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService {
 
     private final DeliveryEvaluationRepository evaluationRepo;
@@ -26,21 +28,21 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
     public DeliveryEvaluation createEvaluation(DeliveryEvaluation eval) {
 
         Vendor vendor = vendorRepo.findById(eval.getVendor().getId())
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("Vendor not found"));
 
         if (!vendor.getActive()) {
-            throw new IllegalStateException("active vendors");
+            throw new IllegalStateException("Vendor is not active");
         }
 
         SLARequirement sla = slaRepo.findById(eval.getSlaRequirement().getId())
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("SLA not found"));
 
         if (eval.getActualDeliveryDays() < 0) {
-            throw new IllegalArgumentException(">= 0");
+            throw new IllegalArgumentException("Actual delivery days must be >= 0");
         }
 
         if (eval.getQualityScore() < 0 || eval.getQualityScore() > 100) {
-            throw new IllegalArgumentException("between 0 and 100");
+            throw new IllegalArgumentException("Quality score must be between 0 and 100");
         }
 
         eval.setMeetsDeliveryTarget(
@@ -51,7 +53,6 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
                 eval.getQualityScore() >= sla.getMinQualityScore()
         );
 
-        // ✅ SET evaluation date
         eval.setEvaluationDate(new Date());
 
         return evaluationRepo.save(eval);
@@ -60,7 +61,7 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
     @Override
     public DeliveryEvaluation getEvaluationById(Long id) {
         return evaluationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() -> new RuntimeException("Evaluation not found"));
     }
 
     @Override
