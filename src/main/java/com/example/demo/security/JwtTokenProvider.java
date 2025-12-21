@@ -10,9 +10,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    // ✅ 256-bit secure key
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-
     private final long EXPIRATION = 1000 * 60 * 60; // 1 hour
 
     public String generateToken(String username) {
@@ -24,7 +22,7 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getUsername(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -33,7 +31,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(String token) {
+    public boolean validate(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
