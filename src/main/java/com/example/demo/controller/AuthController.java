@@ -36,7 +36,6 @@ public class AuthController {
                 req.getPassword()
         );
 
-        // ✅ CORRECT JWT CALL
         String token = jwt.generateToken(user.getEmail());
 
         return new AuthResponse(
