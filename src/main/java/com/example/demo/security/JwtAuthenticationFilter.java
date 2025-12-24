@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,11 +35,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
 
             if (tokenProvider.validateToken(token)) {
-                String username = tokenProvider.getUsernameFromToken(token);
+                Claims claims = tokenProvider.getClaims(token);
+                String email = claims.getSubject();
 
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(
-                                username, null, Collections.emptyList());
+                                email, null, Collections.emptyList());
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }

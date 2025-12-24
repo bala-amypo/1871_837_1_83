@@ -1,23 +1,18 @@
 package com.example.demo.config;
 
 import com.example.demo.security.JwtTokenProvider;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.crypto.SecretKey;
 
 @Configuration
 public class JwtConfig {
 
+    // ✅ Match the constructor expected by tests
     @Bean
-    public SecretKey jwtSecretKey() {
-        // ✅ 256-bit secure key (NO WeakKeyException)
-        return Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS256);
-    }
-
-    @Bean
-    public JwtTokenProvider jwtTokenProvider(SecretKey key) {
-        return new JwtTokenProvider(key);
+    public JwtTokenProvider jwtTokenProvider() {
+        return new JwtTokenProvider(
+                "MySuperSecretVendorSlaKey1234567890",
+                3600000L
+        );
     }
 }

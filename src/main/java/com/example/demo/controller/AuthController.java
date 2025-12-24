@@ -36,7 +36,12 @@ public class AuthController {
                 req.getPassword()
         );
 
-        String token = jwt.generateToken(user.getEmail());
+        // ✅ Use test-compatible JWT method
+        String token = jwt.createToken(
+                user.getEmail(),
+                user.getRole(),
+                user.getId()
+        );
 
         return new AuthResponse(
                 token,

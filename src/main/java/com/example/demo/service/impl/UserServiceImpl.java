@@ -1,55 +1,47 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.Vendor;
-import com.example.demo.repository.VendorRepository;
-import com.example.demo.service.VendorService;
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class VendorServiceImpl implements VendorService {
+public class UserServiceImpl implements UserService {
 
-    private final VendorRepository vendorRepository;
+    private final UserRepository repo;
+    private final PasswordEncoder encoder;
 
-    public VendorServiceImpl(VendorRepository vendorRepository) {
-        this.vendorRepository = vendorRepository;
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
+        this.repo = repo;
+        this.encoder = encoder;
     }
 
     @Override
-    public Vendor createVendor(Vendor vendor) {
-        if (vendorRepository.existsByName(vendor.getName())) {
-            throw new IllegalArgumentException("Vendor name must be unique");
-        }
-        vendor.setActive(true);
-        return vendorRepository.save(vendor);
+    public User register(String email, String password, String role) {
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(encoder.encode(password));
+        user.setRole(role);
+        return repo.save(user);
     }
 
     @Override
-    public Vendor updateVendor(Long id, Vendor vendor) {
-        Vendor existing = getVendorById(id);
-        existing.setName(vendor.getName());
-        existing.setContactEmail(vendor.getContactEmail());
-        existing.setContactPhone(vendor.getContactPhone());
-        return vendorRepository.save(existing);
-    }
-
-    @Override
-    public Vendor getVendorById(Long id) {
-        return vendorRepository.findById(id)
+    public User login(String email, String password) {
+        User user = repo.findByEmail(email)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("Vendor not found"));
+                        new IllegalArgumentException("not found"));
+
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("invalid");
+        }
+        return user;
     }
 
     @Override
-    public List<Vendor> getAllVendors() {
-        return vendorRepository.findAll();
-    }
-
-    @Override
-    public void deactivateVendor(Long id) {
-        Vendor vendor = getVendorById(id);
-        vendor.setActive(false);
-        vendorRepository.save(vendor);
+    public User getByEmail(String email) {
+        return repo.findByEmail(email)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("not found"));
     }
 }
