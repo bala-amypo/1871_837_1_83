@@ -20,6 +20,17 @@ public class Vendor {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    // ✅ REQUIRED no-args constructor
+    public Vendor() {}
+
+    // ✅ REQUIRED by test cases
+    public Vendor(String name, String contactEmail, String contactPhone) {
+        this.name = name;
+        this.contactEmail = contactEmail;
+        this.contactPhone = contactPhone;
+        this.active = true;
+    }
+
     @PrePersist
     void onCreate() {
         createdAt = new Timestamp(System.currentTimeMillis());
@@ -32,7 +43,6 @@ public class Vendor {
         updatedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // ✅ GETTERS
     public Long getId() { return id; }
     public String getName() { return name; }
     public String getContactEmail() { return contactEmail; }
@@ -41,7 +51,6 @@ public class Vendor {
     public Timestamp getCreatedAt() { return createdAt; }
     public Timestamp getUpdatedAt() { return updatedAt; }
 
-    // ✅ SETTERS
     public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setContactEmail(String contactEmail) { this.contactEmail = contactEmail; }
