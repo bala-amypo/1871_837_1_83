@@ -1,47 +1,54 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import com.example.demo.model.Vendor;
+import com.example.demo.repository.VendorRepository;
+import com.example.demo.service.VendorService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-public class UserServiceImpl implements UserService {
+public class VendorServiceImpl implements VendorService {
 
-    private final UserRepository repo;
-    private final PasswordEncoder encoder;
+    private final VendorRepository vendorRepository;
 
-    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder) {
-        this.repo = repo;
-        this.encoder = encoder;
+    public VendorServiceImpl(VendorRepository vendorRepository) {
+        this.vendorRepository = vendorRepository;
     }
 
     @Override
-    public User register(String email, String password, String role) {
-        User user = new User();
-        user.setEmail(email);
-        user.setPassword(encoder.encode(password));
-        user.setRole(role);
-        return repo.save(user);
-    }
-
-    @Override
-    public User login(String email, String password) {
-        User user = repo.findByEmail(email)
-                .orElseThrow(() ->
-                        new IllegalArgumentException("not found"));
-
-        if (!encoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("invalid");
+    public Vendor createVendor(Vendor vendor) {
+        if (vendorRepository.existsByName(vendor.getName())) {
+            throw new IllegalArgumentException("Vendor name must be unique");
         }
-        return user;
+        vendor.setActive(true);
+        return vendorRepository.save(vendor);
     }
 
     @Override
-    public User getByEmail(String email) {
-        return repo.findByEmail(email)
+    public Vendor updateVendor(Long id, Vendor vendor) {
+        Vendor existing = getVendorById(id);
+        existing.setContactEmail(vendor.getContactEmail());
+        existing.setContactPhone(vendor.getContactPhone());
+        return vendorRepository.save(existing);
+    }
+
+    @Override
+    public Vendor getVendorById(Long id) {
+        return vendorRepository.findById(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("not found"));
+                        new IllegalArgumentException("Vendor not found"));
+    }
+
+    @Override
+    public List<Vendor> getAllVendors() {
+        return vendorRepository.findAll();
+    }
+
+    @Override
+    public void deactivateVendor(Long id) {
+        Vendor vendor = getVendorById(id);
+        vendor.setActive(false);
+        vendorRepository.save(vendor);
     }
 }

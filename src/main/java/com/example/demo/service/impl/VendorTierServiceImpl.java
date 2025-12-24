@@ -20,7 +20,11 @@ public class VendorTierServiceImpl implements VendorTierService {
     public VendorTier createTier(VendorTier tier) {
 
         if (tier.getMinScoreThreshold() < 0 || tier.getMinScoreThreshold() > 100) {
-            throw new IllegalArgumentException("Threshold must be between 0–100");
+            throw new IllegalArgumentException("Score threshold must be between 0–100");
+        }
+
+        if (repo.existsByTierName(tier.getTierName())) {
+            throw new IllegalArgumentException("Tier name must be unique");
         }
 
         tier.setActive(true);
@@ -30,9 +34,22 @@ public class VendorTierServiceImpl implements VendorTierService {
     @Override
     public VendorTier updateTier(Long id, VendorTier tier) {
         VendorTier existing = getTierById(id);
-        existing.setTierName(tier.getTierName());
-        existing.setDescription(tier.getDescription());
-        existing.setMinScoreThreshold(tier.getMinScoreThreshold());
+
+        if (tier.getTierName() != null &&
+                !existing.getTierName().equals(tier.getTierName()) &&
+                repo.existsByTierName(tier.getTierName())) {
+            throw new IllegalArgumentException("Tier name must be unique");
+        }
+
+        if (tier.getTierName() != null)
+            existing.setTierName(tier.getTierName());
+
+        if (tier.getDescription() != null)
+            existing.setDescription(tier.getDescription());
+
+        if (tier.getMinScoreThreshold() != null)
+            existing.setMinScoreThreshold(tier.getMinScoreThreshold());
+
         return repo.save(existing);
     }
 
