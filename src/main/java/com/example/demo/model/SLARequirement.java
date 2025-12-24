@@ -17,7 +17,21 @@ public class SLARequirement {
     private Double minQualityScore;
     private Boolean active = true;
 
-    // ✅ GETTERS
+    // ✅ REQUIRED no-args constructor
+    public SLARequirement() {}
+
+    // ✅ REQUIRED by test cases
+    public SLARequirement(String requirementName,
+                          String description,
+                          Integer maxDeliveryDays,
+                          Double minQualityScore) {
+        this.requirementName = requirementName;
+        this.description = description;
+        this.maxDeliveryDays = maxDeliveryDays;
+        this.minQualityScore = minQualityScore;
+        this.active = true;
+    }
+
     public Long getId() { return id; }
     public String getRequirementName() { return requirementName; }
     public String getDescription() { return description; }
@@ -25,7 +39,6 @@ public class SLARequirement {
     public Double getMinQualityScore() { return minQualityScore; }
     public Boolean getActive() { return active; }
 
-    // ✅ SETTERS
     public void setId(Long id) { this.id = id; }
     public void setRequirementName(String requirementName) { this.requirementName = requirementName; }
     public void setDescription(String description) { this.description = description; }

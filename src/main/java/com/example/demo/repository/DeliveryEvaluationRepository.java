@@ -3,14 +3,21 @@ package com.example.demo.repository;
 import com.example.demo.model.DeliveryEvaluation;
 import com.example.demo.model.SLARequirement;
 import com.example.demo.model.Vendor;
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import java.util.List;
 
 public interface DeliveryEvaluationRepository
         extends JpaRepository<DeliveryEvaluation, Long> {
 
+    // ✅ Required by test cases
     List<DeliveryEvaluation> findByVendorId(Long vendorId);
     List<DeliveryEvaluation> findBySlaRequirementId(Long slaId);
+
+    // ✅ Required for Spring Data safety
+    List<DeliveryEvaluation> findByVendor_Id(Long vendorId);
+    List<DeliveryEvaluation> findBySlaRequirement_Id(Long slaId);
 
     @Query("select d from DeliveryEvaluation d where d.vendor = :vendor and d.qualityScore >= :minScore")
     List<DeliveryEvaluation> findHighQualityDeliveries(Vendor vendor, Double minScore);

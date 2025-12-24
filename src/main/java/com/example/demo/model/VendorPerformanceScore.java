@@ -18,6 +18,21 @@ public class VendorPerformanceScore {
     private Double overallScore;
     private Timestamp calculatedAt;
 
+    // ✅ REQUIRED no-args constructor
+    public VendorPerformanceScore() {}
+
+    // ✅ REQUIRED by test cases
+    public VendorPerformanceScore(Vendor vendor,
+                                  Double onTimePercentage,
+                                  Double qualityCompliancePercentage,
+                                  Double overallScore) {
+        this.vendor = vendor;
+        this.onTimePercentage = onTimePercentage;
+        this.qualityCompliancePercentage = qualityCompliancePercentage;
+        this.overallScore = overallScore;
+        this.calculatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
     public Long getId() { return id; }
     public Vendor getVendor() { return vendor; }
     public Double getOnTimePercentage() { return onTimePercentage; }
@@ -25,9 +40,12 @@ public class VendorPerformanceScore {
     public Double getOverallScore() { return overallScore; }
     public Timestamp getCalculatedAt() { return calculatedAt; }
 
+    public void setId(Long id) { this.id = id; }
     public void setVendor(Vendor vendor) { this.vendor = vendor; }
-    public void setOnTimePercentage(Double v) { this.onTimePercentage = v; }
-    public void setQualityCompliancePercentage(Double v) { this.qualityCompliancePercentage = v; }
-    public void setOverallScore(Double v) { this.overallScore = v; }
-    public void setCalculatedAt(Timestamp t) { this.calculatedAt = t; }
+    public void setOnTimePercentage(Double onTimePercentage) { this.onTimePercentage = onTimePercentage; }
+    public void setQualityCompliancePercentage(Double qualityCompliancePercentage) {
+        this.qualityCompliancePercentage = qualityCompliancePercentage;
+    }
+    public void setOverallScore(Double overallScore) { this.overallScore = overallScore; }
+    public void setCalculatedAt(Timestamp calculatedAt) { this.calculatedAt = calculatedAt; }
 }
