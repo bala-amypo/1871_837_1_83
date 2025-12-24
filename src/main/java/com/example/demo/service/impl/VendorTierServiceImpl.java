@@ -18,6 +18,11 @@ public class VendorTierServiceImpl implements VendorTierService {
 
     @Override
     public VendorTier createTier(VendorTier tier) {
+
+        if (tier.getMinScoreThreshold() < 0 || tier.getMinScoreThreshold() > 100) {
+            throw new IllegalArgumentException("Threshold must be between 0–100");
+        }
+
         tier.setActive(true);
         return repo.save(tier);
     }
@@ -34,7 +39,8 @@ public class VendorTierServiceImpl implements VendorTierService {
     @Override
     public VendorTier getTierById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vendor tier not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Vendor tier not found"));
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.example.demo.repository.*;
 import com.example.demo.service.DeliveryEvaluationService;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,14 +28,16 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
     public DeliveryEvaluation createEvaluation(DeliveryEvaluation eval) {
 
         Vendor vendor = vendorRepo.findById(eval.getVendor().getId())
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Vendor not found"));
 
         if (!vendor.getActive()) {
-            throw new IllegalStateException("Vendor is not active");
+            throw new IllegalStateException("Only active vendors allowed");
         }
 
         SLARequirement sla = slaRepo.findById(eval.getSlaRequirement().getId())
-                .orElseThrow(() -> new RuntimeException("SLA not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("SLA not found"));
 
         if (eval.getActualDeliveryDays() < 0) {
             throw new IllegalArgumentException("Actual delivery days must be >= 0");
@@ -53,7 +55,7 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
                 eval.getQualityScore() >= sla.getMinQualityScore()
         );
 
-        eval.setEvaluationDate(new Date());
+        eval.setEvaluationDate(LocalDate.now());
 
         return evaluationRepo.save(eval);
     }
@@ -61,7 +63,8 @@ public class DeliveryEvaluationServiceImpl implements DeliveryEvaluationService 
     @Override
     public DeliveryEvaluation getEvaluationById(Long id) {
         return evaluationRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Evaluation not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Evaluation not found"));
     }
 
     @Override
