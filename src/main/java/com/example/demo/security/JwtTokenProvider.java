@@ -1,40 +1,42 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Map;
 
 public class JwtTokenProvider {
 
     private final SecretKey secretKey;
     private final long validityInMs;
 
-    // ✅ REQUIRED by tests
+    // ✅ REQUIRED BY TESTS
     public JwtTokenProvider(String secret, long validityInMs) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
         this.validityInMs = validityInMs;
     }
 
-    // ✅ REQUIRED by tests
+    // ✅ REQUIRED BY TESTS
     public String createToken(String email, String role, Long userId) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMs);
 
         return Jwts.builder()
                 .setSubject(email)
-                .claim("email", email)
-                .claim("role", role)
-                .claim("userId", userId)
+                .addClaims(Map.of(
+                        "email", email,
+                        "role", role,
+                        "userId", userId
+                ))
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .signWith(secretKey)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // ✅ REQUIRED by tests
+    // ✅ REQUIRED BY TESTS
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -43,7 +45,7 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // ✅ REQUIRED by tests
+    // ✅ REQUIRED BY TESTS
     public boolean validateToken(String token) {
         try {
             getClaims(token);
