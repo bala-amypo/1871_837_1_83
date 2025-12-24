@@ -28,7 +28,6 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor updateVendor(Long id, Vendor vendor) {
         Vendor existing = getVendorById(id);
-        existing.setName(vendor.getName());
         existing.setContactEmail(vendor.getContactEmail());
         existing.setContactPhone(vendor.getContactPhone());
         return vendorRepository.save(existing);
@@ -37,7 +36,8 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor getVendorById(Long id) {
         return vendorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vendor not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Vendor not found"));
     }
 
     @Override

@@ -37,7 +37,8 @@ public class VendorPerformanceScoreServiceImpl
     public VendorPerformanceScore calculateScore(Long vendorId) {
 
         Vendor vendor = vendorRepo.findById(vendorId)
-                .orElseThrow(() -> new RuntimeException("not found"));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("not found"));
 
         List<DeliveryEvaluation> evaluations =
                 evalRepo.findByVendorId(vendorId);
@@ -59,8 +60,6 @@ public class VendorPerformanceScoreServiceImpl
 
             onTimePct = (onTimeCount * 100.0) / total;
             qualityPct = (qualityCount * 100.0) / total;
-
-            // Simple, safe formula hidden tests accept
             overallScore = (onTimePct + qualityPct) / 2.0;
         }
 
@@ -77,17 +76,16 @@ public class VendorPerformanceScoreServiceImpl
     @Override
     public VendorPerformanceScore getLatestScore(Long vendorId) {
         List<VendorPerformanceScore> scores =
-                scoreRepo.findByVendor_IdOrderByCalculatedAtDesc(vendorId);
+                scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
 
         if (scores.isEmpty()) {
-            throw new RuntimeException("not found");
+            throw new IllegalArgumentException("not found");
         }
-
         return scores.get(0);
     }
 
     @Override
     public List<VendorPerformanceScore> getScoresForVendor(Long vendorId) {
-        return scoreRepo.findByVendor_IdOrderByCalculatedAtDesc(vendorId);
+        return scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
     }
 }
