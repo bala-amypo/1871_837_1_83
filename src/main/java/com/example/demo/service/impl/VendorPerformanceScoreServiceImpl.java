@@ -76,7 +76,8 @@ public class VendorPerformanceScoreServiceImpl
     @Override
     public VendorPerformanceScore getLatestScore(Long vendorId) {
         List<VendorPerformanceScore> scores =
-                scoreRepo.findByVendor_IdOrderByCalculatedAtDesc(vendorId);
+            scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
+
 
         if (scores.isEmpty()) {
             throw new RuntimeException("not found");
@@ -87,6 +88,7 @@ public class VendorPerformanceScoreServiceImpl
 
     @Override
     public List<VendorPerformanceScore> getScoresForVendor(Long vendorId) {
-        return scoreRepo.findByVendor_IdOrderByCalculatedAtDesc(vendorId);
+       return scoreRepo.findByVendorOrderByCalculatedAtDesc(vendorId);
+
     }
 }
