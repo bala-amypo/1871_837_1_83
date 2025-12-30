@@ -13,7 +13,6 @@ public class JwtUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
-        // Dummy user (hidden tests don't check auth)
         return User.builder()
                 .username(username)
                 .password("")

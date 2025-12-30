@@ -12,13 +12,11 @@ public class JwtTokenProvider {
     private final SecretKey secretKey;
     private final long validityInMs;
 
-    // ✅ REQUIRED BY TESTS
     public JwtTokenProvider(String secret, long validityInMs) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
         this.validityInMs = validityInMs;
     }
 
-    // ✅ REQUIRED BY TESTS
     public String createToken(String email, String role, Long userId) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + validityInMs);
@@ -35,8 +33,6 @@ public class JwtTokenProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
-
-    // ✅ REQUIRED BY TESTS
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -45,7 +41,6 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // ✅ REQUIRED BY TESTS
     public boolean validateToken(String token) {
         try {
             getClaims(token);
