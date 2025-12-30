@@ -16,25 +16,20 @@ public class DeliveryEvaluationController {
         this.service = service;
     }
 
-    // 1️⃣ Create evaluation
     @PostMapping
     public DeliveryEvaluation create(@RequestBody DeliveryEvaluation evaluation) {
         return service.createEvaluation(evaluation);
     }
 
-    // 2️⃣ Get evaluation by ID
     @GetMapping("/{id}")
     public DeliveryEvaluation getById(@PathVariable Long id) {
         return service.getEvaluationById(id);
     }
 
-    // 3️⃣ Get evaluations for vendor
     @GetMapping("/vendor/{vendorId}")
     public List<DeliveryEvaluation> getByVendor(@PathVariable Long vendorId) {
         return service.getEvaluationsForVendor(vendorId);
     }
-
-    // 4️⃣ Get evaluations for SLA requirement
     @GetMapping("/requirement/{reqId}")
     public List<DeliveryEvaluation> getByRequirement(@PathVariable Long reqId) {
         return service.getEvaluationsForRequirement(reqId);
