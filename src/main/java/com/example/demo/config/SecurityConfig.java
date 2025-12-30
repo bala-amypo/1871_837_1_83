@@ -25,17 +25,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-            // ❌ Disable default login mechanisms
+        
             .csrf(csrf -> csrf.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
             .formLogin(form -> form.disable())
 
-            // ✅ Stateless JWT
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // ✅ Public & secured routes
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/auth/**",
@@ -46,19 +44,17 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
-            // ✅ JWT filter
+        
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // ✅ Required for password hashing
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ✅ Required by Spring Security
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
