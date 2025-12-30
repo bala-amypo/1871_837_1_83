@@ -17,10 +17,8 @@ public class SLARequirement {
     private Double minQualityScore;
     private Boolean active = true;
 
-    // ✅ REQUIRED no-args constructor
     public SLARequirement() {}
 
-    // ✅ REQUIRED by test cases
     public SLARequirement(String requirementName,
                           String description,
                           Integer maxDeliveryDays,

@@ -16,10 +16,8 @@ public class VendorTier {
     private String description;
     private Boolean active = true;
 
-    // ✅ REQUIRED no-args constructor
     public VendorTier() {}
 
-    // ✅ REQUIRED by test cases
     public VendorTier(String tierName, Double minScoreThreshold, String description) {
         this.tierName = tierName;
         this.minScoreThreshold = minScoreThreshold;

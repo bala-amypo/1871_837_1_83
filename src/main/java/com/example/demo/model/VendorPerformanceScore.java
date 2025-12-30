@@ -18,10 +18,8 @@ public class VendorPerformanceScore {
     private Double overallScore;
     private Timestamp calculatedAt;
 
-    // ✅ REQUIRED no-args constructor
     public VendorPerformanceScore() {}
 
-    // ✅ REQUIRED by test cases
     public VendorPerformanceScore(Vendor vendor,
                                   Double onTimePercentage,
                                   Double qualityCompliancePercentage,

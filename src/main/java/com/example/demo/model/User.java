@@ -3,7 +3,7 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users") // ✅ FIX: avoid reserved keyword
+@Table(name = "users")
 public class User {
 
     @Id

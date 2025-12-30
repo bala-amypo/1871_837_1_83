@@ -20,10 +20,8 @@ public class Vendor {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // ✅ REQUIRED no-args constructor
     public Vendor() {}
 
-    // ✅ REQUIRED by test cases
     public Vendor(String name, String contactEmail, String contactPhone) {
         this.name = name;
         this.contactEmail = contactEmail;

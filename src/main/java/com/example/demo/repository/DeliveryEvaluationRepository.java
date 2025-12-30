@@ -11,11 +11,9 @@ import java.util.List;
 public interface DeliveryEvaluationRepository
         extends JpaRepository<DeliveryEvaluation, Long> {
 
-    // ✅ Required by test cases
     List<DeliveryEvaluation> findByVendorId(Long vendorId);
     List<DeliveryEvaluation> findBySlaRequirementId(Long slaId);
 
-    // ✅ Required for Spring Data safety
     List<DeliveryEvaluation> findByVendor_Id(Long vendorId);
     List<DeliveryEvaluation> findBySlaRequirement_Id(Long slaId);
 
