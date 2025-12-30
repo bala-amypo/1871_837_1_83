@@ -17,7 +17,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
-                .info(new Info().title("Personal Finance API").version("1.0"))
+                .info(new Info().title("Vendor SLA Performance Tracker").version("1.0"))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
@@ -26,11 +26,8 @@ public class SwaggerConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")))
-                // You need to change the port as per your server - already changed
                 .servers(List.of(
-                        new Server().url("https://9368.pro604cr.amypo.ai")
+                        new Server().url("https://9198.408procr.amypo.ai/")
                 ));
     }
 }
-
-https://9198.408procr.amypo.ai/
